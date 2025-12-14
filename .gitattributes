@@ -1,0 +1,22 @@
+# Normalisation des fins de ligne
+* text=auto eol=lf
+
+# Diff pour fichiers backend Laravel
+backend/*.blade.php diff=html
+backend/*.css diff=css
+backend/*.html diff=html
+backend/*.md diff=markdown
+backend/*.php diff=php
+
+# Diff pour fichiers frontend Vue
+frontend/*.vue diff=vue
+frontend/*.css diff=css
+frontend/*.js diff=javascript
+frontend/*.ts diff=typescript
+frontend/*.html diff=html
+frontend/*.md diff=markdown
+
+# Fichiers à ignorer lors des exports (archives ZIP, releases, etc.)
+/.github export-ignore
+CHANGELOG.md export-ignore
+.styleci.yml export-ignore
