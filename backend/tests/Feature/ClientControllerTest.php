@@ -7,9 +7,9 @@ use Tests\TestCase;
 use App\Models\Client;
 use PHPUnit\Framework\Attributes\Test;
 
-class ClientControllerApiTest extends TestCase
+class ClientControllerTest extends TestCase
 {
-    use RefreshDatabase; // Reset DB for each test
+    use RefreshDatabase;
 
     #[Test]
     public function it_can_list_clients()

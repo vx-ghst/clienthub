@@ -2,50 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Contract;
 use App\Http\Requests\StoreContractRequest;
+use App\Http\Resources\ContractResource;
+use App\Http\Requests\UpdateContractRequest;
+use Illuminate\Http\JsonResponse;
 
 class ContractController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        return response()->json(ContractResource::collection(Contract::all()));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreContractRequest $request)
+    public function store(StoreContractRequest $request): JsonResponse
     {
         $contract = Contract::create($request->validated());
-        return response()->json($contract, 201);
+        return response()->json(new ContractResource($contract), 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(int $id): JsonResponse
     {
-        //
+        $contract = Contract::findOrFail($id);
+        return response()->json(new ContractResource($contract));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+
+    public function update(UpdateContractRequest $request, int $id)
     {
-        //
+        $contract = Contract::findOrFail($id);
+        $contract->update($request->validated());
+        return response()->json($contract);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+    public function destroy(int $id): JsonResponse
     {
-        //
+        $contract = Contract::findOrFail($id);
+        $contract->delete();
+        return response()->json(null, 204);
+    }
+
+    public function listByClient(int $clientId): JsonResponse
+    {
+        $contracts = Contract::where('client_id', $clientId)->get();
+        return response()->json(ContractResource::collection($contracts));
+    }
+
+    public function storeForClient(StoreContractRequest $request, int $clientId): JsonResponse
+    {
+        $data = $request->validated();
+        $data['client_id'] = $clientId;
+        $contract = Contract::create($data);
+        return response()->json(new ContractResource($contract), 201);
     }
 }

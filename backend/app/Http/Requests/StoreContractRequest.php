@@ -4,58 +4,45 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use \Illuminate\Validation\ValidationException;
 use App\Enums\ContractType;
-use App\Models\Contract;
+use App\Enums\ContractStatus;
 
 class StoreContractRequest extends FormRequest
 {
-    /**
-     * Authorize all users for now before authentication logic is implemented.
-     */
     public function authorize(): bool
     {
-        return true; // allow all users for now before auth logic
+        return true;
     }
 
-    /**
-     * Validation rules for creating/updating a contract.
-     */
     public function rules(): array
     {
+        $clientId = $this->input('client_id');
+
         return [
+            'client_id' => ['required', 'exists:clients,id'],
+
             'type' => [
                 'required',
                 'string',
                 Rule::in(ContractType::values()),
-                function ($attribute, $value, $fail) {
-                    $clientId = $this->input('client_id');
-                    if ($clientId) {
-                        try {
-                            Contract::validateUniqueTypeForClient($clientId, $value);
-                        } catch (ValidationException $e) {
-                            $fail($e->errors()['type'][0]);
-                        }
-                    }
-                }
+                Rule::unique('contracts', 'type')
+                    ->where(fn($q) => $q->where('client_id', $clientId)),
             ],
-            'status' => ['required', 'string', Rule::in(['active', 'closed'])],
+
+            'status' => ['required', 'string', Rule::in(ContractStatus::values())],
             'start_date' => ['required', 'date'],
             'end_date' => ['nullable', 'date'],
-            'client_id' => ['required', 'exists:clients,id'],
         ];
     }
 
-    /**
-     * Custom messages for validation errors.
-     */
     public function messages(): array
     {
         return [
             'type.required' => 'Contract type is required.',
             'type.in' => 'Contract type must be one of: ' . implode(', ', ContractType::values()),
-            'status.required' => 'Status is required.',
-            'status.in' => 'Status must be active or closed.',
+            'type.unique' => 'Client already has a contract of this type.',
+            'status.required' => 'Contract status is required.',
+            'status.in' => 'Status must be one of: ' . implode(', ', ContractStatus::values()),
             'start_date.required' => 'Start date is required.',
             'start_date.date' => 'Start date must be a valid date.',
             'end_date.date' => 'End date must be a valid date.',
