@@ -15,4 +15,14 @@ class Client extends Model
         'email',
         'phone',
     ];
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
+
+    public function hasContractType(string $type): bool
+    {
+        return $this->contracts()->where('type', $type)->exists();
+    }
 }

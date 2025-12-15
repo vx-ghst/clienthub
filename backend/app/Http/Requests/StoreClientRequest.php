@@ -8,7 +8,7 @@ class StoreClientRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true; // autorise tous les utilisateurs pour l’instant
+        return true; // allow all users for now before auth logic is implemented
     }
 
     public function rules(): array
