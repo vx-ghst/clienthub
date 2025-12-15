@@ -38,12 +38,29 @@ class ClientControllerApiTest extends TestCase
     }
 
     #[Test]
+    public function it_validates_phone_when_creating(): void
+    {
+        $data = [
+            'firstname' => 'John',
+            'lastname' => 'Smith',
+            'email' => 'john@gmail.com',
+            'phone' => '12345',
+        ];
+
+        $response = $this->postJson('/api/clients', $data);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['phone']);
+    }
+
+    #[Test]
     public function it_can_create_a_client()
     {
         $data = [
             'firstname' => 'Test',
             'lastname'  => 'User',
             'email'     => 'test@example.com',
+            'phone'     => '+3212345678',
         ];
 
         $response = $this->postJson('/api/clients', $data);
@@ -54,6 +71,7 @@ class ClientControllerApiTest extends TestCase
         $this->assertDatabaseHas('clients', ['firstname' => 'Test']);
         $this->assertDatabaseHas('clients', ['lastname' => 'User']);
         $this->assertDatabaseHas('clients', ['email' => 'test@example.com']);
+        $this->assertDatabaseHas('clients', ['phone' => '+3212345678']);
     }
 
 
@@ -82,7 +100,25 @@ class ClientControllerApiTest extends TestCase
         $response = $this->putJson("/api/clients/{$client->id}", $data);
 
         $response->assertStatus(422)
-                 ->assertJsonValidationErrors(['email']);
+            ->assertJsonValidationErrors(['email']);
+    }
+
+    #[Test]
+    public function it_validates_phone_when_updating(): void
+    {
+        $client = Client::factory()->create();
+
+        $data = [
+            'firstname' => 'Test',
+            'lastname' => 'User',
+            'email' => 'test@gmail.com',
+            'phone' => 'invalid-phone',
+        ];
+
+        $response = $this->putJson("/api/clients/{$client->id}", $data);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['phone']);
     }
 
     #[Test]
