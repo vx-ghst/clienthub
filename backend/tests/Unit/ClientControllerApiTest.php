@@ -23,6 +23,21 @@ class ClientControllerApiTest extends TestCase
     }
 
     #[Test]
+    public function it_validates_email_when_creating(): void
+    {
+        $data = [
+            'firstname' => 'John',
+            'lastname' => 'Smith',
+            'email' => 'not-an-email',
+        ];
+
+        $response = $this->postJson('/api/clients', $data);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors(['email']);
+    }
+
+    #[Test]
     public function it_can_create_a_client()
     {
         $data = [
@@ -41,6 +56,7 @@ class ClientControllerApiTest extends TestCase
         $this->assertDatabaseHas('clients', ['email' => 'test@example.com']);
     }
 
+
     #[Test]
     public function it_can_show_a_client()
     {
@@ -50,6 +66,23 @@ class ClientControllerApiTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonFragment(['email' => $client->email]);
+    }
+
+    #[Test]
+    public function it_validates_email_when_updating(): void
+    {
+        $client = Client::factory()->create();
+
+        $data = [
+            'firstname' => 'Test',
+            'lastname' => 'User',
+            'email' => 'invalid-email',
+        ];
+
+        $response = $this->putJson("/api/clients/{$client->id}", $data);
+
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['email']);
     }
 
     #[Test]

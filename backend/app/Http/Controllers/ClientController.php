@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Client;
 use Illuminate\Http\JsonResponse;
+
+use App\Models\Client;
+use App\Http\Requests\StoreClientRequest;
 
 /**
  * Class ClientController
@@ -46,13 +48,9 @@ class ClientController extends Controller
      * @param Request $request Client-submitted data
      * @return JsonResponse Newly created client with 201 status
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreClientRequest  $request): JsonResponse
     {
-        $client = Client::create($request->only([
-            'firstname',
-            'lastname',
-            'email',
-        ]));
+        $client = Client::create($request->validated());
 
         return response()->json($client, 201);
     }
@@ -87,7 +85,7 @@ class ClientController extends Controller
      * @param int $id Client ID
      * @return JsonResponse Updated client or error message
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(StoreClientRequest  $request, int $id): JsonResponse
     {
         $client = Client::find($id);
 
@@ -95,11 +93,7 @@ class ClientController extends Controller
             return response()->json(['message' => 'Client not found'], 404);
         }
 
-        $client->update($request->only([
-            'firstname',
-            'lastname',
-            'email',
-        ]));
+        $client->update($request->validated());
 
         return response()->json($client);
     }
