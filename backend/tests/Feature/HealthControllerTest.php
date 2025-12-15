@@ -5,10 +5,11 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class HealthControllerTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function api_health_endpoint_returns_ok_status(): void
     {
         // Act : call HTTP GET /api/health
