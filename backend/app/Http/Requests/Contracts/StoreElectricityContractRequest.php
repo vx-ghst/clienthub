@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Contracts;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -17,7 +17,7 @@ class StoreElectricityContractRequest extends FormRequest
         return [
             'contract_id' => [
                 'required',
-                'exists:contracts,id',
+                Rule::exists('contracts', 'id')->where(fn($q) => $q->where('type', 'electricity')),
                 Rule::unique('electricity_contracts', 'contract_id'),
             ],
 
