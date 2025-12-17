@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Contracts;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Enums\ContractType;
-use App\Enums\ContractStatus;
+use App\Enums\Contracts\ContractType;
+use App\Enums\Contracts\ContractStatus;
 
 class StoreContractRequest extends FormRequest
 {

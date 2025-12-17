@@ -4,9 +4,9 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\Client;
-use App\Models\Contract;
-use App\Enums\ContractType;
-use App\Enums\ContractStatus;
+use App\Models\Contracts\Contract;
+use App\Enums\Contracts\ContractType;
+use App\Enums\Contracts\ContractStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ContractControllerTest extends TestCase

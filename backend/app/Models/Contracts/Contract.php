@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Models\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Enums\ContractType;
-use App\Enums\ContractStatus;
+use App\Enums\Contracts\ContractType;
+use App\Enums\Contracts\ContractStatus;
+use App\Models\Client;
 
 class Contract extends Model
 {

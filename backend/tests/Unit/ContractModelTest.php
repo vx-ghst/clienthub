@@ -3,10 +3,10 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Models\Contract;
+use App\Models\Contracts\Contract;
 use App\Models\Client;
-use App\Enums\ContractType;
-use App\Enums\ContractStatus;
+use App\Enums\Contracts\ContractType;
+use App\Enums\Contracts\ContractStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ContractModelTest extends TestCase

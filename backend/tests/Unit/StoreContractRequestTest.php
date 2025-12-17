@@ -4,10 +4,10 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\Models\Client;
-use App\Enums\ContractType;
-use App\Enums\ContractStatus;
+use App\Enums\Contracts\ContractType;
+use App\Enums\Contracts\ContractStatus;
+use App\Models\Contracts\Contract;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -61,7 +61,7 @@ class StoreContractRequestTest extends TestCase
     {
         $client = Client::factory()->create();
 
-        \App\Models\Contract::create([
+        Contract::create([
             'client_id' => $client->id,
             'type' => ContractType::Gas->value,
             'status' => ContractStatus::Active->value,
