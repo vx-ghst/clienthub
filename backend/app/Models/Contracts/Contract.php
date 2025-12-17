@@ -7,6 +7,8 @@ namespace App\Models\Contracts;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\Contracts\ElectricityContract;
 use App\Enums\Contracts\ContractType;
 use App\Enums\Contracts\ContractStatus;
 use App\Models\Client;
@@ -36,5 +38,10 @@ class Contract extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function electricity(): HasOne
+    {
+        return $this->hasOne(ElectricityContract::class);
     }
 }
